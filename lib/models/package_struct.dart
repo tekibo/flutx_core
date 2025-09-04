@@ -1,4 +1,4 @@
-class PackageStruct {
+class PackageStructure {
   final String name;
   final String? version;
   final String? url;
@@ -7,7 +7,7 @@ class PackageStruct {
   final bool isDev;
   final bool isGit;
 
-  PackageStruct({
+  PackageStructure({
     required this.name,
     this.version,
     this.url,

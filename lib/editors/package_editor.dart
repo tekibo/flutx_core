@@ -92,7 +92,7 @@ class PackageEditor {
     save();
   }
 
-  List<PackageStruct> listDevPackages() {
+  List<PackageStructure> listDevPackages() {
     try {
       final devDepNode = _editor.parseAt(['dev_dependencies']).value;
       return parseDeps(nodes: devDepNode, isDev: true);
@@ -102,7 +102,7 @@ class PackageEditor {
     return [];
   }
 
-  List<PackageStruct> _listPackages() {
+  List<PackageStructure> _listPackages() {
     try {
       final depNode = _editor.parseAt(['dependencies']).value;
       return parseDeps(nodes: depNode, isDev: false);
@@ -112,8 +112,8 @@ class PackageEditor {
     return [];
   }
 
-  List<PackageStruct> listAllPackages({bool excludeDevs = false}) {
-    List<PackageStruct> packages = [];
+  List<PackageStructure> listAllPackages({bool excludeDevs = false}) {
+    List<PackageStructure> packages = [];
     packages.addAll(_listPackages());
     if (!excludeDevs) packages.addAll(listDevPackages());
     return packages;

@@ -1,18 +1,18 @@
 import 'package:flutx_core/flutx_core.dart';
 
 class ClassGenerator {
-  final ClassStruct classStruct;
+  final ClassStructure classStruct;
   final String packageName;
 
   ClassGenerator(this.classStruct, this.packageName);
 
-  String _getFieldType(ClassFieldStruct field) {
+  String _getFieldType(ClassFieldStructure field) {
     final base = field.fieldType;
     final type = field.isList ? 'List<$base>' : base;
     return field.isNullable ? '$type?' : type;
   }
 
-  String _getBaseType(ClassFieldStruct field) {
+  String _getBaseType(ClassFieldStructure field) {
     return field.fieldType;
   }
 

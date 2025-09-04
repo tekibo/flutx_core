@@ -1,8 +1,8 @@
 import 'package:flutx_core/models/class_field_struct.dart';
 
-class ClassStruct {
+class ClassStructure {
   final String className;
-  final List<ClassFieldStruct> fields;
+  final List<ClassFieldStructure> fields;
 
-  ClassStruct({required this.className, required this.fields});
+  ClassStructure({required this.className, required this.fields});
 }

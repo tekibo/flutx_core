@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutx_core/flutx_core.dart';
 
-List<PackageStruct> parseDeps({required dynamic nodes, bool isDev = false}) {
-  List<PackageStruct> packages = [];
+List<PackageStructure> parseDeps({required dynamic nodes, bool isDev = false}) {
+  List<PackageStructure> packages = [];
   if (nodes is Map) {
     nodes.forEach((key, value) {
       var isMap = value is Map;
@@ -17,7 +17,7 @@ List<PackageStruct> parseDeps({required dynamic nodes, bool isDev = false}) {
       var ref = isGit ? value['git']['ref'] : null;
       var path = isGit ? value['git']['path'] : null;
 
-      var formedPackage = PackageStruct(
+      var formedPackage = PackageStructure(
         name: key,
         version: version,
         url: url,

@@ -5,7 +5,7 @@ import 'package:dart_style/dart_style.dart';
 class ClassEditor {
   final String dir;
   final String packageName;
-  final List<ClassStruct> classes;
+  final List<ClassStructure> classes;
   late FileEditor _hiveFileEditor;
   late DartFormatter _formatter;
 
@@ -46,14 +46,14 @@ class ClassEditor {
   String _generateHiveAdapters() {
     StringBuffer hiveBuffer = StringBuffer();
     hiveBuffer.writeln("import 'package:hive_ce/hive.dart';");
-    for (ClassStruct classVal in classes) {
+    for (ClassStructure classVal in classes) {
       hiveBuffer.writeln(
         "import 'package:${toSnakeCase(packageName)}/data/flutX/models/${toSnakeCase(classVal.className)}.dart';",
       );
     }
     hiveBuffer.writeln("part 'hive_adapters.g.dart';");
     hiveBuffer.writeln("@GenerateAdapters([");
-    for (ClassStruct classVal in classes) {
+    for (ClassStructure classVal in classes) {
       hiveBuffer.writeln("  AdapterSpec<${classVal.className}>(),");
     }
     hiveBuffer.writeln("])");
@@ -63,7 +63,7 @@ class ClassEditor {
 
   void generate() {
     ClassGenerator classGenerator;
-    for (ClassStruct classVal in classes) {
+    for (ClassStructure classVal in classes) {
       classGenerator = ClassGenerator(classVal, packageName);
       String classCode = classGenerator.generateClass();
       _saveClass(code: _format(classCode), className: classVal.className);

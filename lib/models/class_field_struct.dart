@@ -1,4 +1,4 @@
-class ClassFieldStruct {
+class ClassFieldStructure {
   final String fieldName;
   final String fieldType;
   final String? defaultValue;
@@ -6,7 +6,7 @@ class ClassFieldStruct {
   final bool isList;
   final bool isCustomType;
 
-  ClassFieldStruct({
+  ClassFieldStructure({
     required this.fieldName,
     required this.fieldType,
     this.defaultValue,
