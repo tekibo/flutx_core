@@ -56,12 +56,12 @@ String toSnakeCase(String input) {
 
 ClassFieldStructure converToField(dynamic data) {
   return ClassFieldStructure(
-    fieldName: data['fieldName'],
-    fieldType: data['fieldType'],
-    isNullable: data['isNullable'],
-    defaultValue: data['defaultValue'],
-    isList: data['isList'],
-    isCustomType: data['isCustomType'],
+    fieldName: data.fieldName,
+    fieldType: data.fieldType,
+    isNullable: data.isNullable,
+    defaultValue: data.defaultValue,
+    isList: data.isList,
+    isCustomType: data.isCustomType,
   );
 }
 
@@ -76,8 +76,8 @@ List<ClassFieldStructure> convertToFields(List<dynamic> data) {
 
 ClassStructure convertToClass(dynamic data) {
   return ClassStructure(
-    className: data['className'],
-    fields: convertToFields(data['fields']),
+    className: data.className,
+    fields: convertToFields(data.fields),
   );
 }
 
