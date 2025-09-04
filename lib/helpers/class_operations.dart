@@ -7,9 +7,12 @@ class ClassGenerator {
   ClassGenerator(this.classStruct, this.packageName);
 
   String _getFieldType(ClassFieldStructure field) {
-    final base = field.fieldType;
-    final type = field.isList ? 'List<$base>' : base;
-    return field.isNullable ? '$type?' : type;
+    final base = field.isList ? 'List<${field.fieldType}>' : field.fieldType;
+    return field.isNullable ? '$base?' : base;
+  }
+
+  String _getNonNullableType(ClassFieldStructure field) {
+    return field.isList ? 'List<${field.fieldType}>' : field.fieldType;
   }
 
   String _getBaseType(ClassFieldStructure field) {
@@ -45,12 +48,12 @@ class ClassGenerator {
     // Fields
     for (final field in classStruct.fields) {
       final type = _getFieldType(field);
-      final defaultValue = field.defaultValue != null
+      final defaultValue =
+          (field.defaultValue != null && field.defaultValue!.trim().isNotEmpty)
           ? ' = ${field.defaultValue}'
           : '';
       buffer.writeln('  final $type ${field.fieldName}$defaultValue;');
     }
-    buffer.writeln();
 
     // Constructor
     buffer.writeln('  ${classStruct.className}({');
@@ -69,7 +72,7 @@ class ClassGenerator {
     // copyWith
     buffer.writeln('  ${classStruct.className} copyWith({');
     for (final field in classStruct.fields) {
-      final type = _getFieldType(field);
+      final type = _getNonNullableType(field); // <-- FIXED
       buffer.writeln('    $type? ${field.fieldName},');
     }
     buffer.writeln('  }) {');
