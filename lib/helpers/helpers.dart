@@ -53,3 +53,39 @@ String toSnakeCase(String input) {
   RegExp exp = RegExp(r'(?<!^)(?=[A-Z])');
   return input.split(exp).join('_').toLowerCase();
 }
+
+ClassFieldStructure converToField(dynamic data) {
+  return ClassFieldStructure(
+    fieldName: data['fieldName'],
+    fieldType: data['fieldType'],
+    isNullable: data['isNullable'],
+    defaultValue: data['defaultValue'],
+    isList: data['isList'],
+    isCustomType: data['isCustomType'],
+  );
+}
+
+List<ClassFieldStructure> convertToFields(List<dynamic> data) {
+  List<ClassFieldStructure> fields = [];
+  for (var d in data) {
+    var field = converToField(d);
+    fields.add(field);
+  }
+  return fields;
+}
+
+ClassStructure convertToClass(dynamic data) {
+  return ClassStructure(
+    className: data['className'],
+    fields: convertToFields(data['fields']),
+  );
+}
+
+List<ClassStructure> convertToClasses(List<dynamic> data) {
+  List<ClassStructure> classes = [];
+  for (var d in data) {
+    var classStructure = convertToClass(d);
+    classes.add(classStructure);
+  }
+  return classes;
+}
