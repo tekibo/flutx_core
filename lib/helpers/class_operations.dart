@@ -48,18 +48,17 @@ class ClassGenerator {
     // Fields
     for (final field in classStruct.fields) {
       final type = _getFieldType(field);
-      buffer.writeln('  final $type ${field.fieldName};');
+      final defaultValue =
+          (field.defaultValue != null && field.defaultValue!.trim().isNotEmpty)
+          ? ' = ${field.defaultValue}'
+          : '';
+      buffer.writeln('  final $type ${field.fieldName}$defaultValue;');
     }
 
     // Constructor
     buffer.writeln('  ${classStruct.className}({');
     for (final field in classStruct.fields) {
-      if (field.defaultValue != null && field.defaultValue!.trim().isNotEmpty) {
-        // optional with default
-        buffer.writeln('    this.${field.fieldName} = ${field.defaultValue},');
-      } else if (field.isNullable) {
-        buffer.writeln('    this.${field.fieldName},');
-      } else {
+      if (field.defaultValue == null || field.defaultValue!.trim().isEmpty) {
         buffer.writeln('    required this.${field.fieldName},');
       }
     }
@@ -81,8 +80,7 @@ class ClassGenerator {
     for (final field in classStruct.fields) {
       if (field.isList) {
         buffer.writeln(
-          '      ${field.fieldName}: ${field.fieldName} ?? '
-          '(this.${field.fieldName} != null ? List<${_getBaseType(field)}>.from(this.${field.fieldName}!) : null),',
+          '      ${field.fieldName}: ${field.fieldName} ?? (this.${field.fieldName} != null ? List<${_getBaseType(field)}>.from(this.${field.fieldName}!) : null),',
         );
       } else {
         buffer.writeln(
