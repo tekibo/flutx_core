@@ -5,20 +5,22 @@ import 'package:dart_style/dart_style.dart';
 class ClassEditor {
   final String dir;
   final String packageName;
-  final List<ClassStructure> classes;
+  late List<ClassStructure> classes;
+  final List<dynamic> data;
   late FileEditor _hiveFileEditor;
   late DartFormatter _formatter;
 
   ClassEditor({
     required this.dir,
     required this.packageName,
-    required this.classes,
+    required this.data,
   }) {
     final hiveFilePath = p.join(dir, 'lib', 'hive', 'hive_adapters.dart');
     _hiveFileEditor = FileEditor(filepath: hiveFilePath);
     _formatter = DartFormatter(
       languageVersion: DartFormatter.latestLanguageVersion,
     );
+    classes = convertToClasses(data);
   }
 
   String _format(String code) {
@@ -71,6 +73,4 @@ class ClassEditor {
     String hiveAdaptersCode = _generateHiveAdapters();
     _saveHiveAdapter(_format(hiveAdaptersCode));
   }
-
-
 }
