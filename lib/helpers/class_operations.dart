@@ -48,31 +48,32 @@ class ClassGenerator {
     // Fields
     for (final field in classStruct.fields) {
       final type = _getFieldType(field);
-      final defaultValue =
-          (field.defaultValue != null && field.defaultValue!.trim().isNotEmpty)
-          ? ' = ${field.defaultValue}'
-          : '';
-      buffer.writeln('  final $type ${field.fieldName}$defaultValue;');
+      buffer.writeln('  final $type ${field.fieldName};');
     }
 
     // Constructor
     buffer.writeln('  ${classStruct.className}({');
     for (final field in classStruct.fields) {
-      buffer.writeln('    required this.${field.fieldName},');
+      if (field.defaultValue != null && field.defaultValue!.trim().isNotEmpty) {
+        // optional with default
+        buffer.writeln('    this.${field.fieldName} = ${field.defaultValue},');
+      } else if (field.isNullable) {
+        buffer.writeln('    this.${field.fieldName},');
+      } else {
+        buffer.writeln('    required this.${field.fieldName},');
+      }
     }
     buffer.writeln('  });\n');
 
     // Equatable props
     final propsFields = classStruct.fields.map((f) => f.fieldName).join(', ');
     buffer.writeln('  @override');
-    buffer.writeln(
-      '  List<Object${classStruct.fields.any((f) => f.isNullable) ? '?' : ''}> get props => [$propsFields];\n',
-    );
+    buffer.writeln('  List<Object?> get props => [$propsFields];\n');
 
     // copyWith
     buffer.writeln('  ${classStruct.className} copyWith({');
     for (final field in classStruct.fields) {
-      final type = _getNonNullableType(field); // <-- FIXED
+      final type = _getNonNullableType(field);
       buffer.writeln('    $type? ${field.fieldName},');
     }
     buffer.writeln('  }) {');
@@ -80,7 +81,8 @@ class ClassGenerator {
     for (final field in classStruct.fields) {
       if (field.isList) {
         buffer.writeln(
-          '      ${field.fieldName}: ${field.fieldName} ?? (this.${field.fieldName}.isNotEmpty ? List<${_getBaseType(field)}>.from(this.${field.fieldName}) : []),',
+          '      ${field.fieldName}: ${field.fieldName} ?? '
+          '(this.${field.fieldName} != null ? List<${_getBaseType(field)}>.from(this.${field.fieldName}!) : null),',
         );
       } else {
         buffer.writeln(
